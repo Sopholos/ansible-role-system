@@ -1,0 +1,10 @@
+---
+- name: manage /etc/hosts entries
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item.ip }} {{ item.host }}$'
+    line: "{{ item.ip }} {{ item.host }}"
+    state: "{{ item.state | default ('present') }}"
+  when: linux_hosts is defined
+  with_items: "{{ linux_hosts }}"
+  

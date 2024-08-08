@@ -1,0 +1,25 @@
+---
+- name: hosts
+  import_tasks: hosts.yaml
+  tags: [ config ]
+
+- name: upgrade
+  import_tasks: upgrade.yaml
+  tags: [ upgrade ]
+
+- name: scripts
+  import_tasks: scripts.yaml
+  tags: [ config ]
+
+- name: prepare-systemctl
+  import_tasks: prepare-systemctl.yaml
+  when: linux_sysctl is defined 
+  tags: [ config ]
+
+- name: time
+  import_tasks: time.yaml
+  tags: [ config ]
+
+- name: users
+  import_tasks: users.yaml
+  tags: [ users ]

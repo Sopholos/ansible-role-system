@@ -1,0 +1,12 @@
+---
+- name: manage user {{ item.name }}
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.password is defined | ternary(item.password | default('') | password_hash('sha512'), '!') }}"
+    comment: "{{ item.comment | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    uid: "{{ item.uid | default(omit) }}"
+    shell: "{{ item.shell | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  # no_log: True

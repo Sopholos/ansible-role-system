@@ -1,0 +1,11 @@
+---
+- name: Set sysctl settings
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ linux_sysctl }}"
+  when:
+    - linux_sysctl is defined
+    - item.name is defined
+    - item.value is defined

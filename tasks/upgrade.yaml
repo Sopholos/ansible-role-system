@@ -1,0 +1,8 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    autoremove: yes
+    upgrade: 'yes'
+  when: linux_upgrade is defined and linux_upgrade | bool

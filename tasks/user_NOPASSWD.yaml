@@ -1,0 +1,9 @@
+---
+- name: Put {{ item }} to NOPASSWD
+  lineinfile:
+    dest: "/etc/sudoers.d/{{ item | replace('.', '_') }}"
+    create: true
+    state: present
+    regexp: '^{{ item }}'
+    line: '{{ item }} ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'

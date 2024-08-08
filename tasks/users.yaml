@@ -1,0 +1,34 @@
+---
+- name: manage groups
+  include_tasks:
+    file: user_group.yaml
+    apply:
+      tags: [ users, groups ]
+  with_items: "{{ linux_groups }}"
+  when: linux_groups is defined
+  tags: [ groups ]
+
+- name: manage users
+  include_tasks:
+    file: user.yaml
+    apply:
+      tags: [ users ]
+  with_items: "{{ linux_users }}"
+  when: linux_users is defined
+
+- name: manage users authorized keys
+  include_tasks:
+    file: user_keys.yaml
+    apply:
+      tags: [ users ]
+  with_items: "{{ linux_users }}"
+  when: linux_users is defined
+
+- name: manage NOPASSWD users/groups
+  include_tasks:
+    file: user_NOPASSWD.yaml
+    apply:
+      tags: [ users, nopaswd ]
+  with_items: "{{ linux_NOPASSWDers }}"
+  when: linux_NOPASSWDers is defined
+  tags: [ nopaswd ]

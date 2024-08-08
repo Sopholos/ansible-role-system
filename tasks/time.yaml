@@ -1,0 +1,17 @@
+---
+- name: setup | Set timezone to {{ linux_timezone }}
+  community.general.timezone:
+    name: "{{ linux_timezone }}"
+  notify: restart ntp
+  when: linux_timezone is defined and linux_timezone  != ""
+
+- name: setup | NTP to server {{ linux_ntpserver }}
+  ini_file:
+    path: /etc/systemd/timesyncd.conf
+    section: "Time"
+    option: "NTP"
+    value: "{{ linux_ntpserver }}"
+    state: present
+    no_extra_spaces: yes
+  notify: restart ntp
+  when: linux_ntpserver is defined and linux_ntpserver != ""

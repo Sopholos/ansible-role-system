@@ -1,0 +1,10 @@
+---
+- name: prepare | copy runonce script  
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u+rwx,g=rx,o=rx
+  with_items: 
+    - { src: runonce, dest: /usr/local/bin/runonce }
