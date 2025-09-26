@@ -8,6 +8,15 @@
   when: linux_groups is defined
   tags: [ groups ]
 
+- name: manage NOPASSWD users/groups
+  include_tasks:
+    file: user_NOPASSWD.yaml
+    apply:
+      tags: [ users, nopaswd ]
+  with_items: "{{ linux_NOPASSWDers }}"
+  when: linux_NOPASSWDers is defined
+  tags: [ nopaswd ]
+
 - name: manage users
   include_tasks:
     file: user.yaml
@@ -23,12 +32,3 @@
       tags: [ users ]
   with_items: "{{ linux_users }}"
   when: linux_users is defined
-
-- name: manage NOPASSWD users/groups
-  include_tasks:
-    file: user_NOPASSWD.yaml
-    apply:
-      tags: [ users, nopaswd ]
-  with_items: "{{ linux_NOPASSWDers }}"
-  when: linux_NOPASSWDers is defined
-  tags: [ nopaswd ]

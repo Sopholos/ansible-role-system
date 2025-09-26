@@ -1,0 +1,9 @@
+---
+- name: Fill {{ item.name }} file with variable
+  ansible.builtin.template:
+    src: file_var.j2
+    dest: "{{ item.path }}" 
+    mode: "{{ item.mode | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+  no_log: "{{ item.no_log | default(false) }}"

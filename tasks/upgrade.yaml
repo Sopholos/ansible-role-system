@@ -6,3 +6,12 @@
     autoremove: yes
     upgrade: 'yes'
   when: linux_upgrade is defined and linux_upgrade | bool
+
+- name: Linux | Installing extra packages
+  ansible.builtin.apt:
+    pkg: "{{ linux_required_pkg }}"
+    state: present
+    update_cache: yes
+  when:
+    - linux_required_pkg is defined
+    - ansible_os_family == 'Debian'

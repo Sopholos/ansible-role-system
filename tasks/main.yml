@@ -13,7 +13,7 @@
 
 - name: prepare-systemctl
   import_tasks: prepare-systemctl.yaml
-  when: linux_sysctl is defined 
+  when: linux_sysctl is defined
   tags: [ config ]
 
 - name: time
@@ -23,3 +23,7 @@
 - name: users
   import_tasks: users.yaml
   tags: [ users ]
+
+- name: files_vars
+  import_tasks:  files_vars.yml
+  tags: [ files_vars ]

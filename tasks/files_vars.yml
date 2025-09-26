@@ -1,0 +1,10 @@
+---
+- name: Fill files with variables
+  include_tasks:
+    file: file_var.yml
+    apply:
+      tags: [ files_vars ]
+  with_items: "{{ files_variables }}"
+  when: files_variables is defined
+  tags: [ files_vars ]
+  no_log: true
