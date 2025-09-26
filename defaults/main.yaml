@@ -1,4 +1,0 @@
----
-
-netplan_template: "99-ansible-managed.yaml.j2"
-netplan_config: ""
