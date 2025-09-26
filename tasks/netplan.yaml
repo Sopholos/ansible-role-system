@@ -1,0 +1,32 @@
+---
+- name: "List of interfaces with status create"
+  ansible.builtin.set_fact:
+    managed_netplan_interfaces: >-
+      {{ (netplan_interfaces | default([]))
+         | selectattr("status", "equalto", "create")
+         | list }}
+
+- name: "Check existing netplan file"
+  ansible.builtin.stat:
+    path: /etc/netplan/99-ansible-managed.yaml
+  register: managed_netplan_stat
+
+- name: "Write to /etc/netplan/99-ansible-managed.yaml"
+  ansible.builtin.template:
+    src: 99-ansible-managed.yaml.j2
+    dest: /etc/netplan/99-ansible-managed.yaml
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+  when: managed_netplan_interfaces | length > 0
+  notify: apply netplan
+
+- name: "Delete /etc/netplan/99-ansible-managed.yaml"
+  ansible.builtin.file:
+    path: /etc/netplan/99-ansible-managed.yaml
+    state: absent
+  when:
+    - managed_netplan_interfaces | length == 0
+    - managed_netplan_stat.stat.exists
+  notify: apply netplan

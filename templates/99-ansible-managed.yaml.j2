@@ -1,0 +1,43 @@
+# Managed by Ansible role: 99-ansible-managed.yaml
+network:
+  version: 2
+  renderer: networkd
+{% if managed_netplan_interfaces | length > 0 %}
+  ethernets:
+{% for item in managed_netplan_interfaces %}
+    {{ item.name }}:
+{% if item.mac is defined and item.mac | length > 0 %}
+      match:
+        macaddress: "{{ item.mac }}"
+      set-name: "{{ item.name }}"
+{% endif %}
+{% if item.addresses is defined and item.addresses | length > 0 %}
+      addresses:
+{% for addr in item.addresses %}
+        - "{{ addr }}"
+{% endfor %}
+{% else %}
+      dhcp4: true
+{% endif %}
+{% if item.gateway is defined and item.gateway | length > 0 %}
+      gateway4: "{{ item.gateway }}"
+{% endif %}
+{% if item.dns is defined and item.dns | length > 0 %}
+      nameservers:
+        addresses:
+{% for dns in item.dns %}
+          - "{{ dns }}"
+{% endfor %}
+{% endif %}
+{% if item.routes is defined and item.routes | length > 0 %}
+      routes:
+{% for r in item.routes %}
+        - to: "{{ r.to }}"
+          via: "{{ r.via }}"
+{% if r.metric is defined %}
+          metric: {{ r.metric }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
