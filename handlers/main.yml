@@ -5,6 +5,18 @@
     daemon_reload: yes
     state: restarted
 
-- name: apply netplan
-  ansible.builtin.command: netplan apply
-  become: yes
+- name: Validate and apply netplan
+  block:
+    - name: Validate netplan (generate)
+      command: netplan generate
+      register: netplan_generate
+      changed_when: false
+
+    - name: Fail if netplan config invalid
+      fail:
+        msg: "netplan generate failed:\n{{ netplan_generate.stderr | default(netplan_generate.stdout) }}"
+      when: netplan_generate.rc != 0
+
+    - name: Apply netplan
+      command: netplan apply
+  become: true
