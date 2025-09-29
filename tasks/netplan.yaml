@@ -30,7 +30,6 @@
       command: netplan apply
 
   become: true
-  ignore_errors: true
 
 - name: Force cleanup if controlled_interfaces is not in netplan
   shell: |
