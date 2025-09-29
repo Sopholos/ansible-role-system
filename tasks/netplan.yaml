@@ -30,12 +30,3 @@
       command: netplan apply
 
   become: true
-
-- name: Force cleanup if controlled_interfaces is not in netplan
-  shell: |
-    for interface in {{ controlled_interfaces | join(' ') }}; do
-      if ! netplan get network.ethernets.$interface 2>/dev/null | grep -q addresses; then
-        ip addr flush dev $interface 2>/dev/null || true
-      fi
-    done
-  register: interface_check
