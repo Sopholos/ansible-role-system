@@ -4,7 +4,6 @@
   file:
     path: /etc/netplan/99-ansible-managed.yaml
     state: absent
-  ignore_errors: true 
 
 - name: Copy netplan configuration in place.
   template:
