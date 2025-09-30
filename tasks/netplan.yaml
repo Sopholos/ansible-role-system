@@ -1,0 +1,31 @@
+---
+
+- name: Delete netplan configuration
+  file:
+    path: /etc/netplan/99-ansible-managed.yaml
+    state: absent
+
+- name: Copy netplan configuration in place.
+  template:
+    src: 99-ansible-managed.yaml.j2
+    dest: /etc/netplan/99-ansible-managed.yaml
+    mode: 0644
+  register: tpl_result
+  when: netplan_config is defined
+
+- name: Validate and apply
+  when: tpl_result.changed
+  block:
+    - name: netplan generate
+      command: netplan generate
+      register: netplan_generate
+
+    - name: Fail if netplan config invalid
+      fail:
+        msg: "netplan generate failed:\n{{ netplan_generate.stderr | default(netplan_generate.stdout) }}"
+      when: netplan_generate.rc != 0
+
+    - name: Apply netplan
+      command: netplan apply
+
+  become: true

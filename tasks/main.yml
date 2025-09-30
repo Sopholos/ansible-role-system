@@ -27,3 +27,7 @@
 - name: files_vars
   import_tasks:  files_vars.yml
   tags: [ files_vars ]
+
+- name: netplan
+  import_tasks: netplan.yaml
+  tags: [ netplan ]
