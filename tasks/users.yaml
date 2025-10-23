@@ -17,17 +17,17 @@
   when: linux_NOPASSWDers is defined
   tags: [ nopaswd ]
 
-- name: manage users
+- name: manage users authorized keys
   include_tasks:
-    file: user.yaml
+    file: user_keys.yaml
     apply:
       tags: [ users ]
   with_items: "{{ linux_users }}"
   when: linux_users is defined
 
-- name: manage users authorized keys
+- name: manage users
   include_tasks:
-    file: user_keys.yaml
+    file: user.yaml
     apply:
       tags: [ users ]
   with_items: "{{ linux_users }}"
