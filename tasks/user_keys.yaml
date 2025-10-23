@@ -5,3 +5,13 @@
     state: present
     key: "{{ lookup('url', item.authorized_keys_url, split_lines=False, validate_certs=False) }}"
   when: item.authorized_keys_url is defined and (item.state is not defined or item.state != 'absent')
+
+- name: manage user {{ item.name }} authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ lookup('url', authorized_keys_url, split_lines=False, validate_certs=False) }}"
+  when: item.authorized_keys_urls is defined and (item.state is not defined or item.state != 'absent')
+  loop: "{{ item.authorized_keys_urls  }}"
+  loop_control:
+      loop_var: authorized_keys_url
