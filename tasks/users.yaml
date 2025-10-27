@@ -17,9 +17,9 @@
   when: linux_NOPASSWDers is defined
   tags: [ nopaswd ]
 
-- name: manage users authorized keys
+- name: manage users authorized keys before change users
   include_tasks:
-    file: user_keys.yaml
+    file: user_keys_old.yaml
     apply:
       tags: [ users ]
   with_items: "{{ linux_users }}"
@@ -28,6 +28,14 @@
 - name: manage users
   include_tasks:
     file: user.yaml
+    apply:
+      tags: [ users ]
+  with_items: "{{ linux_users }}"
+  when: linux_users is defined
+
+- name: manage users authorized keys for new users too
+  include_tasks:
+    file: user_keys.yaml
     apply:
       tags: [ users ]
   with_items: "{{ linux_users }}"
